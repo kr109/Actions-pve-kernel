@@ -22,7 +22,14 @@ rm -rf /usr/lib/jvm
 rm -rf /usr/share/az_*
 rm -rf /opt/pipx
 rm -rf /opt/hostedtoolcache
-docker rmi $(docker image ls -q --filter "reference=node*")
-docker rmi $(docker image ls -q --filter "reference=buildpack*")
-docker rmi $(docker image ls -q --filter "reference=alpine*")
-docker rmi $(docker image ls -q --filter "reference=ubuntu*")
+remove_images() {
+  images=$(docker image ls -q --filter "reference=$1")
+  if [ -n "$images" ]; then
+    docker rmi $images
+  fi
+}
+
+remove_images "node*"
+remove_images "buildpack*"
+remove_images "alpine*"
+remove_images "ubuntu*"
